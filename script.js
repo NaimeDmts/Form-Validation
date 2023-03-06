@@ -1,8 +1,8 @@
-const form = document.getElementById('form');
-const username = document.getElementById('username');
-const email = document.getElementById('email');
-const password = document.getElementById('password');
-const repassword = document.getElementById('repassword');
+ const form = document.getElementById('form');
+ const username = document.getElementById('username');
+ const email = document.getElementById('email');
+ const password = document.getElementById('password');
+ const repassword = document.getElementById('repassword');
 
 function error(input, message){
     input.className = 'form-control is-invalid';
@@ -15,35 +15,30 @@ function success(input){
     input.className = 'form-control is-valid'
 }
 
-function validateEmail(email) {
+function validateEmail(input) {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
+    // return re.test(String(email).toLowerCase());
+    if(re.test(input.value)){
+        success(input);
+    } else{
+        error(input, 'Wrong e-mail address!')
+    }
+}
+
+function checkRequired(inputs){
+    inputs.forEach(function(input)
+    {
+        if(input.value === ''){
+            error(input, `${input.id} is required!`);
+        }else{
+           success(input);
+        }
+    });
 }
 
 form.addEventListener('submit', function(e){
     e.preventDefault();
 
-    if(username.value === ''){
-        error(username, 'Username required');
-    }else{
-        success(username);
-    }
-    if(email.value === ''){
-          error(email, 'Email required');
-    }else if(!validateEmail(email.value)){
-        error(email,'Not suitable for mail format!');
-    }
-    else{
-         success(email);
-    }
-    if(password.value === ''){
-          error(password,'Password required');
-    }else{
-          success(password );
-    }
-    if(repassword.value === ''){
-        error(repassword,'Password again required');
-    }else{
-         success(repassword);
-    }
+    checkRequired([username,email,password,repassword]);
+    validateEmail(email);
 })
